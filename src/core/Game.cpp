@@ -2,14 +2,12 @@
 #include <iostream>
 #include <iomanip>
 
-Game::Game(int rounds, const std::string& matrixFile) : currentRound(0), totalRounds(rounds), matrix(matrixFile) {
-    scores.resize(3, 0);
-    history.resize(3);
-    currentMoves.resize(3);
+Game::Game(int rounds, const std::string& matrixFile) 
+    : currentRound(0), totalRounds(rounds), matrix(matrixFile) {
 }
 
 void Game::addPlayer(std::unique_ptr<Strategy> player) {
-    players.push_back(std::move(player));
+    players.addPlayer(std::move(player));
 }
 
 void Game::playRound() {
@@ -18,25 +16,28 @@ void Game::playRound() {
         return;
     }
 
+    // 1. Каждый игрок делает ход
     for (int i = 0; i < 3; ++i) {
-        std::vector<std::vector<Move>> opponentsHistory;
-        for (int j = 0; j < 3; ++j) {
-            if (i != j) {
-                opponentsHistory.push_back(history[j]);
-            }
-        }
-
-        currentMoves[i] = players[i]->makeMove(history[i], opponentsHistory);
+        auto opponentsHistory = players.getOpponentsHistory(i);
+        auto ownHistory = players.getPlayerHistory(i);
+        
+        Move move = players.getStrategies()[i]->makeMove(ownHistory, opponentsHistory);
+        players.setCurrentMove(i, move);
     }
 
-    std::vector<int> roundScores = matrix.getPayoff(currentMoves[0], currentMoves[1], currentMoves[2]);
+    // 2. Получаем очки за раунд
+    auto currentMoves = players.getCurrentMoves();
+    std::vector<int> roundScores = matrix.getPayoff(
+        currentMoves[0], currentMoves[1], currentMoves[2]);
 
+    // 3. Обновляем очки
     for (int i = 0; i < 3; ++i) {
-        scores[i] += roundScores[i];
+        players.addToScore(i, roundScores[i]);
     }
 
+    // 4. Сохраняем ходы в историю
     for (int i = 0; i < 3; ++i) {
-        history[i].push_back(currentMoves[i]);
+        players.addMoveToHistory(i, currentMoves[i]);
     }
 
     currentRound++;
@@ -49,15 +50,11 @@ void Game::playGame() {
 }
 
 std::vector<int> Game::getScores() const {
-    return scores;
+    return players.getScores();
 }
 
 std::vector<std::string> Game::getPlayerNames() const {
-    std::vector<std::string> names;
-    for (const auto& player : players) {
-        names.push_back(player->getName());
-    }
-    return names;
+    return players.getNames();
 }
 
 int Game::getCurrentRound() const {
@@ -65,26 +62,22 @@ int Game::getCurrentRound() const {
 }
 
 bool Game::isReady() const {
-    return players.size() == 3;
+    return players.hasThreePlayers();
 }
 
 void Game::reset() {
     players.clear();
-    history.clear();
-    currentMoves.clear();
-    scores.clear();
+    players.resizeForThreePlayers();
     currentRound = 0;
-    
-    // Пересоздаем векторы
-    scores.resize(3, 0);
-    history.resize(3);
-    currentMoves.resize(3);
+}
+
+std::vector<Move> Game::getCurrentMoves() const {
+    return players.getCurrentMoves();
 }
 
 void Game::printMatrix() const {
     std::cout << "\n=== GAME MATRIX ===" << std::endl;
     matrix.printMatrix();
-    std::cout << "===================\n" << std::endl;
 }
 
 void Game::printRoundInfo() const {
@@ -93,13 +86,16 @@ void Game::printRoundInfo() const {
         return;
     }
     
+    auto names = players.getNames();
+    auto currentMoves = players.getCurrentMoves();
+    auto scores = players.getScores();
+    
     std::cout << "\n=== Round " << currentRound << " ===" << std::endl;
     
     std::cout << "Moves: ";
-    for (size_t i = 0; i < players.size(); ++i) {
-        std::cout << players[i]->getName() << ": " 
-                  << moveToChar(currentMoves[i]);
-        if (i < players.size() - 1) std::cout << ", ";
+    for (size_t i = 0; i < names.size(); ++i) {
+        std::cout << names[i] << ": " << moveToChar(currentMoves[i]);
+        if (i < names.size() - 1) std::cout << ", ";
     }
     std::cout << std::endl;
     
@@ -107,32 +103,34 @@ void Game::printRoundInfo() const {
         currentMoves[0], currentMoves[1], currentMoves[2]);
     
     std::cout << "Round scores: ";
-    for (size_t i = 0; i < players.size(); ++i) {
-        std::cout << players[i]->getName() << ": " << roundScores[i];
-        if (i < players.size() - 1) std::cout << ", ";
+    for (size_t i = 0; i < names.size(); ++i) {
+        std::cout << names[i] << ": " << roundScores[i];
+        if (i < names.size() - 1) std::cout << ", ";
     }
     std::cout << std::endl;
     
     std::cout << "Total scores: ";
-    for (size_t i = 0; i < players.size(); ++i) {
-        std::cout << players[i]->getName() << ": " << scores[i];
-        if (i < players.size() - 1) std::cout << ", ";
+    for (size_t i = 0; i < names.size(); ++i) {
+        std::cout << names[i] << ": " << scores[i];
+        if (i < names.size() - 1) std::cout << ", ";
     }
     std::cout << std::endl;
     std::cout << "===================\n" << std::endl;
 }
 
 void Game::printFinalResults() const {
+    auto names = players.getNames();
+    auto scores = players.getScores();
+    
     std::cout << "\n=========================================" << std::endl;
     std::cout << "FINAL RESULTS" << std::endl;
-    std::cout << "=========================================" << std::endl;
     std::cout << "Total rounds played: " << currentRound << std::endl;
     
     int maxScore = -1;
     int winnerIndex = -1;
     
-    for (size_t i = 0; i < players.size(); ++i) {
-        std::cout << players[i]->getName() << ": " << scores[i] << " points" << std::endl;
+    for (size_t i = 0; i < names.size(); ++i) {
+        std::cout << names[i] << ": " << scores[i] << " points" << std::endl;
         
         if (scores[i] > maxScore) {
             maxScore = scores[i];
@@ -143,7 +141,7 @@ void Game::printFinalResults() const {
     std::cout << std::string(40, '-') << std::endl;
     
     if (winnerIndex != -1) {
-        std::cout << "WINNER: " << players[winnerIndex]->getName() 
+        std::cout << "WINNER: " << names[winnerIndex] 
                   << " with " << maxScore << " points!" << std::endl;
     }
     

@@ -6,13 +6,11 @@
 #include <string>
 #include "core/Strategy.h"
 #include "core/GameMatrix.h"
+#include "core/Players.h"
 
 class Game {
 private:
-    std::vector<std::unique_ptr<Strategy>> players;
-    std::vector<std::vector<Move>> history;
-    std::vector<Move> currentMoves;
-    std::vector<int> scores;
+    Players players;
     GameMatrix matrix;
     int currentRound;
     int totalRounds;
@@ -35,7 +33,7 @@ public:
     bool isReady() const;
     void reset();
     
-    std::vector<Move> getCurrentMoves() const { return currentMoves; }
+    std::vector<Move> getCurrentMoves() const;
 };
 
 #endif
