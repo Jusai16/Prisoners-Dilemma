@@ -1,0 +1,24 @@
+
+============================================================
+2025-12-22 07:51:27 | GAME STARTED
+Players: AggressiveTitForTat SmartAdaptive AlternatingStrategy | Rounds: 200
+============================================================
+============================================================
+2025-12-22 07:51:27 | GAME ENDED
+AggressiveTitForTat: 808 points
+SmartAdaptive: 1016 points
+AlternatingStrategy: 1196 points
+WINNER: AlternatingStrategy with 1196 points!
+============================================================
+
+============================================================
+2025-12-22 09:25:04 | GAME STARTED
+Players: AggressiveTitForTat SmartAdaptive AlternatingStrategy | Rounds: 200
+============================================================
+============================================================
+2025-12-22 09:25:04 | GAME ENDED
+AggressiveTitForTat: 886 points
+SmartAdaptive: 994 points
+AlternatingStrategy: 1318 points
+WINNER: AlternatingStrategy with 1318 points!
+============================================================

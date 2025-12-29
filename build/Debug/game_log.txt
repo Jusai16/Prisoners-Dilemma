@@ -1,0 +1,36 @@
+
+============================================================
+2025-12-22 09:26:56 | GAME STARTED
+Players: TitForTat AdaptiveStrategy FiftyFifty | Rounds: 100
+============================================================
+============================================================
+2025-12-22 09:26:56 | GAME ENDED
+TitForTat: 487 points
+AdaptiveStrategy: 504 points
+FiftyFifty: 780 points
+WINNER: FiftyFifty with 780 points!
+============================================================
+
+============================================================
+2025-12-22 09:27:18 | GAME STARTED
+Players: TitForTat AdaptiveStrategy FiftyFifty | Rounds: 100
+============================================================
+============================================================
+2025-12-22 09:27:18 | GAME ENDED
+TitForTat: 447 points
+AdaptiveStrategy: 452 points
+FiftyFifty: 740 points
+WINNER: FiftyFifty with 740 points!
+============================================================
+
+============================================================
+2025-12-22 09:43:10 | GAME STARTED
+Players: TitForTat AdaptiveStrategy FiftyFifty | Rounds: 100
+============================================================
+============================================================
+2025-12-22 09:43:10 | GAME ENDED
+TitForTat: 444 points
+AdaptiveStrategy: 456 points
+FiftyFifty: 744 points
+WINNER: FiftyFifty with 744 points!
+============================================================

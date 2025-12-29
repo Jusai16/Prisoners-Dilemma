@@ -1,0 +1,19 @@
+Start testing: Dec 22 07:46 Новосибирское стандартное время
+----------------------------------------------------------
+Unable to find executable: C:/Users/driuk/Game/build/Debug/run_tests.exe
+1/1 Testing: PrisonersDilemmaTests
+1/1 Test: PrisonersDilemmaTests
+Command: ""
+Directory: C:/Users/driuk/Game/build
+"PrisonersDilemmaTests" start time: 
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"PrisonersDilemmaTests" end time: Dec 22 07:46 Новосибирское стандартное время
+"PrisonersDilemmaTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Dec 22 07:46 Новосибирское стандартное время

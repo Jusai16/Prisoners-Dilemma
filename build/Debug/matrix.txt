@@ -1,0 +1,12 @@
+# Prisoner's Dilemma Matrix (3 players)
+# Format: Move1 Move2 Move3 Score1 Score2 Score3
+# C = Cooperate, D = Defect
+
+C C C 6 6 6
+C C D 3 3 9
+C D C 3 9 3
+D C C 9 3 3
+C D D 0 5 5
+D C D 5 0 5
+D D C 5 5 0
+D D D 1 1 1
